@@ -1,3 +1,3 @@
-import { ProductModel } from '../product.model';
+import { Product } from '../product.model';
 
-export class SaveProductDto extends ProductModel {}
+export class SaveProductDto extends Product {}

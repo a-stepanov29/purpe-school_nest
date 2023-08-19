@@ -1,3 +1,3 @@
-import { ReviewModel } from '../review.model';
+import { Review } from '../review.model';
 
-export class SaveReviewDto extends ReviewModel {}
+export class SaveReviewDto extends Review {}

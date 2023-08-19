@@ -1,3 +1,3 @@
-import { TopPageModel } from '../top-page.model';
+import { TopPage } from '../top-page.model';
 
-export class SaveTopPageModelDto extends TopPageModel {}
+export class SaveTopPageModelDto extends TopPage {}
