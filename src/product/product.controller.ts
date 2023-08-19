@@ -8,14 +8,26 @@ import { SuccessResponse } from '../helpers/success.response';
 @Controller('product')
 export class ProductController {
   @Get('get/:id')
-  async get(@Param('id') id: string): Promise<ProductModel> {}
+  async get(@Param('id') id: string): Promise<ProductModel> {
+    console.log(id);
+    return new Promise(() => ProductModel);
+  }
 
   @Post('find')
-  async getByCategory(@Body() dto: FindProductDto): Promise<ProductModel[]> {}
+  async getByCategory(@Body() dto: FindProductDto): Promise<ProductModel[]> {
+    console.log(dto);
+    return new Promise(() => ProductModel);
+  }
 
   @Post('save')
-  async save(@Body() dto: SaveProductDto): Promise<ProductModel> {}
+  async save(@Body() dto: SaveProductDto): Promise<ProductModel> {
+    console.log(dto);
+    return new Promise(() => ProductModel);
+  }
 
   @Delete('delete')
-  async delete(@Body() dto: DeleteProductDto): Promise<SuccessResponse> {}
+  async delete(@Body() dto: DeleteProductDto): Promise<SuccessResponse> {
+    console.log(dto);
+    return new Promise(() => ProductModel);
+  }
 }

@@ -6,6 +6,7 @@ import { DeleteTopPageDto } from './dto/delete-top-page.dto';
 import { SuccessResponse } from '../helpers/success.response';
 import { FindTopPageResponse } from './dto/find-top-page.response';
 import { ConfigService } from '@nestjs/config';
+import { ReviewModel } from '../review/review.model';
 
 @Controller('top-page')
 export class TopPageController {
@@ -13,15 +14,25 @@ export class TopPageController {
 
   @Get('get/:alias')
   async get(@Param('alias') alias: string): Promise<TopPageModel> {
-    this.configService.get('TEST');
+    console.log(alias);
+    return new Promise(() => TopPageModel);
   }
 
   @Post('find')
-  async getByCategory(@Body() dto: FindTopPageDto): Promise<FindTopPageResponse> {}
+  async getByCategory(@Body() dto: FindTopPageDto): Promise<FindTopPageResponse> {
+    console.log(dto);
+    return new Promise(() => FindTopPageResponse);
+  }
 
   @Post('save')
-  async find(@Body() dto: SaveTopPageModelDto): Promise<TopPageModel> {}
+  async find(@Body() dto: SaveTopPageModelDto): Promise<TopPageModel> {
+    console.log(dto);
+    return new Promise(() => TopPageModel);
+  }
 
   @Delete('delete')
-  async delete(@Body() dto: DeleteTopPageDto): Promise<SuccessResponse> {}
+  async delete(@Body() dto: DeleteTopPageDto): Promise<SuccessResponse> {
+    console.log(dto);
+    return new Promise(() => SuccessResponse);
+  }
 }

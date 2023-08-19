@@ -7,11 +7,20 @@ import { SuccessResponse } from '../helpers/success.response';
 @Controller('review')
 export class ReviewController {
   @Get('get/:productId')
-  async get(@Param('productId') productId: string): Promise<ReviewModel[]> {}
+  async get(@Param('productId') productId: string): Promise<ReviewModel[]> {
+    console.log(productId);
+    return new Promise(() => ReviewModel);
+  }
 
   @Post('save')
-  async save(@Body() dto: SaveReviewDto): Promise<ReviewModel> {}
+  async save(@Body() dto: SaveReviewDto): Promise<ReviewModel> {
+    console.log(dto);
+    return new Promise(() => ReviewModel);
+  }
 
   @Delete('delete')
-  async delete(@Param('id') dto: DeleteReviewDto): Promise<SuccessResponse> {}
+  async delete(@Param('id') dto: DeleteReviewDto): Promise<SuccessResponse> {
+    console.log(dto);
+    return new Promise(() => SuccessResponse);
+  }
 }
