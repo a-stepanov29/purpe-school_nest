@@ -1,26 +1,42 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import { Review } from './review.model';
-import { SaveReviewDto } from './dto/seve-review.dto';
-import { DeleteReviewDto } from './dto/delete-review.dto';
-import { SuccessResponse } from '../helpers/success.response';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
+
+import { CreateReviewDto } from './dto/create-review.dto';
+import { ReviewService } from './review.service';
+import { REVIEW_NOT_FOUND } from './review.constants';
 
 @Controller('review')
 export class ReviewController {
-  @Get('get/:productId')
-  async get(@Param('productId') productId: string): Promise<Review[]> {
-    console.log(productId);
-    return new Promise(() => Review);
+  constructor(private readonly reviewService: ReviewService) {}
+
+  @Post('create')
+  async create(@Body() dto: CreateReviewDto) {
+    return this.reviewService.create(dto);
   }
 
-  @Post('save')
-  async save(@Body() dto: SaveReviewDto): Promise<Review> {
-    console.log(dto);
-    return new Promise(() => Review);
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    const deletedDoc = await this.reviewService.delete(id);
+    if (!deletedDoc) {
+      throw new HttpException(REVIEW_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
   }
 
-  @Delete('delete')
-  async delete(@Param('id') dto: DeleteReviewDto): Promise<SuccessResponse> {
-    console.log(dto);
-    return new Promise(() => SuccessResponse);
+  @Delete('by-product/:productId')
+  async deleteByProductId(@Param('productId') productId: string) {
+    return await this.reviewService.deleteByProduct(productId);
+  }
+
+  @Get('by-product/:productId')
+  async get(@Param('productId') productId: string) {
+    return this.reviewService.findByProductId(productId);
   }
 }
