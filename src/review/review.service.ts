@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Review, ReviewDocument } from './review.model';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 class DeleteResult {
   deletedCount: number;
@@ -13,7 +13,7 @@ export class ReviewService {
   constructor(@InjectModel(Review.name) private readonly reviewModel: Model<Review>) {}
 
   async create(dto: CreateReviewDto): Promise<ReviewDocument> {
-    return this.reviewModel.create(dto);
+    return this.reviewModel.create({ ...dto, productId: new Types.ObjectId(dto.productId) });
   }
 
   async delete(id: string): Promise<ReviewDocument> | null {
