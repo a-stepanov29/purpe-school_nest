@@ -1,33 +1,68 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { Product } from './product.model';
 import { FindProductDto } from './dto/find-product.dto';
-import { SaveProductDto } from './dto/save-product.dto';
-import { DeleteProductDto } from './dto/delete-product.tdo';
-import { SuccessResponse } from '../helpers/success.response';
+import { CreateProductDto } from './dto/create-product.dto';
+import { ProductService } from './product.service';
+import { PRODUCT_NOT_FOUND_ERROR } from './product.constants';
+import { IdValidationPipe } from '../pipes/id-validation.pipe';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 
 @Controller('product')
 export class ProductController {
-  @Get('get/:id')
-  async get(@Param('id') id: string): Promise<Product> {
-    console.log(id);
-    return new Promise(() => Product);
+  constructor(private readonly productService: ProductService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Post('create')
+  async create(@Body() dto: CreateProductDto) {
+    return this.productService.create(dto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async get(@Param('id', IdValidationPipe) id: string) {
+    const product = await this.productService.findById(id);
+    if (!product) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
+    }
+    return product;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async delete(@Param('id', IdValidationPipe) id: string) {
+    const deletedProduct = await this.productService.deleteById(id);
+    if (!deletedProduct) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
+    }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: Product) {
+    const updatedProduct = await this.productService.updateById(id, dto);
+    if (!updatedProduct) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND_ERROR);
+    }
+    return updatedProduct;
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
   @Post('find')
-  async getByCategory(@Body() dto: FindProductDto): Promise<Product[]> {
-    console.log(dto);
-    return new Promise(() => Product);
-  }
-
-  @Post('save')
-  async save(@Body() dto: SaveProductDto): Promise<Product> {
-    console.log(dto);
-    return new Promise(() => Product);
-  }
-
-  @Delete('delete')
-  async delete(@Body() dto: DeleteProductDto): Promise<SuccessResponse> {
-    console.log(dto);
-    return new Promise(() => Product);
+  async find(@Body() dto: FindProductDto) {
+    return this.productService.findWithReviews(dto);
   }
 }
