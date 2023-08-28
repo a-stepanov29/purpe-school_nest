@@ -40,7 +40,7 @@ export class TopPage {
   @Prop()
   secondCategory: string;
 
-  @Prop({ unique: true })
+  @Prop()
   alias: string;
 
   @Prop()
@@ -66,3 +66,4 @@ export class TopPage {
 }
 
 export const TopPageSchema = SchemaFactory.createForClass(TopPage);
+TopPageSchema.index({ '$**': 'text' });

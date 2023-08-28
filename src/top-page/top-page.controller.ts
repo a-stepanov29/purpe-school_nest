@@ -7,7 +7,8 @@ import {
   NotFoundException,
   Param,
   Patch,
-  Post, UseGuards,
+  Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -36,7 +37,6 @@ export class TopPageController {
     return page;
   }
 
-
   @Get('byAlias/:alias')
   async getByAlias(@Param('alias') alias: string) {
     const page = await this.topPageService.findByAlias(alias);
@@ -63,5 +63,10 @@ export class TopPageController {
   @Post('find')
   async find(@Body() dto: FindTopPageDto) {
     return this.topPageService.findByCategory(dto.firstCategory);
+  }
+
+  @Get('textSearch/:text')
+  async textSearch(@Param('text') text: string) {
+    return this.topPageService.findByText(text);
   }
 }
