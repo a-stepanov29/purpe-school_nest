@@ -32,7 +32,7 @@ export class TopPageAdvantages {
   description: string;
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class TopPage {
   @Prop({ enum: TopLevelCategory })
   firstCategory: TopLevelCategory;
@@ -63,6 +63,12 @@ export class TopPage {
 
   @Prop([String])
   tags: [string];
+
+  @Prop(Date)
+  createdAt: Date;
+
+  @Prop(Date)
+  updatedAt: Date;
 }
 
 export const TopPageSchema = SchemaFactory.createForClass(TopPage);
